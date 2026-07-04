@@ -406,3 +406,24 @@ footer.site-footer .foot-links a { margin: 0 0.6rem; }
   .hero h1 { font-size: 1.8rem; }
   body { font-size: 16px; }
 }
+
+/* ---------- Language switcher ---------- */
+
+nav.lang-switcher {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+
+nav.lang-switcher a {
+  color: var(--ink-faint);
+  text-decoration: none;
+  padding: 0 0.15rem;
+}
+
+nav.lang-switcher a:hover { color: var(--amber); }
+nav.lang-switcher a[aria-current="true"] {
+  color: var(--amber);
+  font-weight: 700;
+}
