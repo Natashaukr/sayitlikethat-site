@@ -230,12 +230,18 @@ hr {
 .feature h3 { margin: 0 0 0.5rem; font-size: 1.05rem; color: var(--amber); }
 .feature p  { margin: 0; font-size: 0.92rem; color: var(--ink-dim); }
 
-/* ---------- Screenshot placeholders ---------- */
+/* ---------- Screenshot placeholders → phone-frame mockups ----------
+   Each placeholder reads as an iPhone standing at a slight angle:
+   a dark bezel, a notch, and a gentle 3D tilt with a soft floor
+   shadow. Hovering straightens it (desktop only). Swapping in real
+   screenshots later: put the <img> inside the same div — the frame
+   and the tilt stay. */
 
 .screens {
   display: grid;
-  gap: 1rem;
-  margin: 2rem 0;
+  gap: 1.5rem;
+  margin: 2.5rem 0;
+  perspective: 1400px;           /* one shared vanishing point */
 }
 
 @media (min-width: 640px) {
@@ -244,16 +250,72 @@ hr {
 
 .screen-placeholder {
   aspect-ratio: 9 / 19;
-  border: 2px dashed var(--teal-mid);
-  border-radius: 24px;
-  background: var(--teal-dark);
+  border: 8px solid #0B1414;     /* the bezel */
+  border-radius: 34px;
+  background: linear-gradient(160deg, var(--teal-mid) 0%, var(--teal-dark) 35%, var(--teal-deep) 100%);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: var(--ink-faint);
   font-size: 0.85rem;
-  padding: 1rem;
+  padding: 1.5rem 1rem 1rem;
+  transform: rotateY(-6deg) rotateX(2deg);
+  box-shadow:
+    -18px 24px 40px -14px rgba(0, 0, 0, 0.55),
+    -4px 8px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* The notch / speaker pill */
+.screen-placeholder::before {
+  content: "";
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34%;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #0B1414;
+}
+
+/* Desktop: the phone gently straightens under the cursor */
+@media (hover: hover) {
+  .screen-placeholder:hover {
+    transform: rotateY(0deg) rotateX(0deg);
+    box-shadow:
+      0 28px 48px -16px rgba(0, 0, 0, 0.55),
+      0 8px 18px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Reduced motion: the frame just stands still — no straightening */
+@media (prefers-reduced-motion: reduce) {
+  .screen-placeholder { transition: none; }
+  .screen-placeholder:hover {
+    transform: rotateY(-6deg) rotateX(2deg);
+    box-shadow:
+      -18px 24px 40px -14px rgba(0, 0, 0, 0.55),
+      -4px 8px 16px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* ---------- Scroll reveal (reveal.js adds the classes) ----------
+   Sections fade-rise in as they enter the viewport. The .reveal
+   class only ever comes from JS, so the site stays fully visible
+   with scripts off; reduced-motion users never get it at all. */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* ---------- Blog list ---------- */
