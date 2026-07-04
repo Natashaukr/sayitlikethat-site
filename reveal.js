@@ -37,3 +37,35 @@
     els.forEach(function (el) { el.classList.add('is-visible'); });
   }, 1000);
 })();
+
+/* Living water: on roomy screens with no data/motion objections, the
+   hero's still ocean crossfades into a real video loop of the same
+   water. Phones keep the photo + shimmer — 6 MB of ocean is a desktop
+   luxury, not a mobile tax. No JS, slow networks, reduced motion:
+   everyone simply keeps the beautiful still. */
+(function () {
+  var media = document.querySelector('.hero-media');
+  if (!media || !window.matchMedia) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!matchMedia('(min-width: 900px)').matches) return;
+  var conn = navigator.connection;
+  if (conn && (conn.saveData || /(^|\b)2g/.test(conn.effectiveType || ''))) return;
+
+  var css = document.querySelector('link[rel="stylesheet"][href$="style.css"]');
+  var base = css ? css.getAttribute('href').replace('style.css', '') : '';
+  var v = document.createElement('video');
+  v.muted = true; v.loop = true; v.playsInline = true;
+  v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+  v.setAttribute('aria-hidden', 'true');
+  v.preload = 'auto';
+  v.className = 'hero-video';
+  v.src = base + 'assets/ocean-live.mp4';
+  v.addEventListener('canplaythrough', function () {
+    var p = v.play();
+    var ok = function () { v.classList.add('is-flowing'); };
+    if (p && p.then) { p.then(ok).catch(function () { v.remove(); }); }
+    else { ok(); }
+  }, { once: true });
+  v.addEventListener('error', function () { v.remove(); }, { once: true });
+  media.appendChild(v);
+})();
