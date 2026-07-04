@@ -427,3 +427,42 @@ nav.lang-switcher a[aria-current="true"] {
   color: var(--amber);
   font-weight: 700;
 }
+
+/* ---------- Translation glosses (localized pages) ---------- */
+
+.gloss {
+  display: block;
+  font-size: 0.85em;
+  color: var(--ink-dim);
+  font-style: italic;
+  margin-top: 0.35rem;
+}
+
+body.hide-gloss .gloss { display: none; }
+
+.gloss-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--teal-dark);
+  border: 1px solid var(--teal-mid);
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-dim);
+}
+
+.gloss-toggle label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.gloss-toggle input[type="checkbox"] {
+  accent-color: var(--amber);
+  width: 1.05rem;
+  height: 1.05rem;
+  cursor: pointer;
+}
