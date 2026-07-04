@@ -925,3 +925,15 @@ body.hide-gloss .gloss { display: none; }
   transition: opacity 1.4s ease;
 }
 .hero-video.is-flowing { opacity: 1; }
+
+/* Real app screenshots inside the phone frames */
+.screen-placeholder { overflow: hidden; }
+.screen-placeholder img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 26px;
+}
+.screen-placeholder::before { z-index: 2; }
