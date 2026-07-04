@@ -19,12 +19,11 @@
 
 <header class="site-header">
   <a class="wordmark" href="index.html">SayIt<span>Like</span>That</a>
-  <p class="tagline">Говорите с американской мелодикой</p>
   <nav class="site-nav">
     <a href="index.html" aria-current="page">Главная</a>
     <a href="blog/index.html">Блог</a>
     <a href="checklist.html">Бесплатный чек-лист</a>
-    <a href="../support.html">Поддержка</a>
+    <a class="nav-pill" href="../support.html">Поддержка<span class="pill-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></span></a>
   </nav>
 
   <nav class="lang-switcher" aria-label="Language">
@@ -38,21 +37,46 @@
   </nav>
 </header>
 
-<main>
-
+<div class="hero-wrap">
   <section class="hero">
-    <h1>Пусть ваш акцент <span class="melody">очаровывает</span>, а не сбивает с толку.</h1>
-    <p class="lead"><strong>Сохраните акцент. Освойте мелодику.</strong> SayItLikeThat — телесуфлёр для iPhone, который показывает не просто слова, а то, <em>как</em> их произносить. Ударные слова подсвечиваются, и ваш голос поднимается и опускается так, как на самом деле звучит американский английский. Звучите естественно, выглядите уверенно, говорите с американской мелодикой.</p>
+    <div class="hero-media" aria-hidden="true">
+      <div class="hero-shimmer hero-shimmer--one"></div>
+      <div class="hero-shimmer hero-shimmer--two"></div>
+    </div>
+
+    <div class="hero-inner">
+      <p class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3c.7 4.5 3.5 7.3 8 8-4.5.7-7.3 3.5-8 8-.7-4.5-3.5-7.3-8-8 4.5-.7 7.3-3.5 8-8z"/></svg> Говорите с американской мелодикой</p>
+      <h1>Пусть ваш акцент <span class="melody">очаровывает</span>, а не сбивает с толку.</h1>
+      <p class="lead"><strong>Сохраните акцент. Освойте мелодику.</strong> SayItLikeThat — телесуфлёр для iPhone, который показывает не просто слова, а то, <em>как</em> их произносить. Ударные слова подсвечиваются, и ваш голос поднимается и опускается так, как на самом деле звучит американский английский. Звучите естественно, выглядите уверенно, говорите с американской мелодикой.</p>
+    </div>
+
+    <aside class="hero-stat">
+      <span class="stat-number">7</span>
+      <span class="stat-label">языков на этом сайте</span>
+      <a class="stat-cta" href="checklist.html">Получить бесплатный чек-лист</a>
+    </aside>
 
     <!-- ============================================================
          APP STORE LINK PLACEHOLDER
          When the app is live, replace the href below with the real
          App Store URL, e.g. https://apps.apple.com/app/id0000000000
-         and change the button text to "Download on the App Store".
+         and change the title text to "Download on the App Store".
          ============================================================ -->
-    <a class="btn" href="#" onclick="return false;">App Store — скоро</a>
-    <span class="btn-note">Скоро выйдет для iPhone</span>
+    <div class="hero-cutout" id="app-store-cta">
+      <svg class="cutout-fillet fillet-top" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M28 0A28 28 0 0 1 0 28L28 28Z"/></svg>
+      <svg class="cutout-fillet fillet-side" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M28 0A28 28 0 0 1 0 28L28 28Z"/></svg>
+      <a class="cutout-card" href="#" onclick="return false;">
+        <span class="cutout-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></span>
+        <span class="cutout-copy">
+          <strong>App Store — скоро</strong>
+          <small>Бесплатно · 7 дней пробного периода</small>
+        </span>
+      </a>
+    </div>
   </section>
+</div>
+
+<main>
 
   <section class="features">
     <div class="feature">

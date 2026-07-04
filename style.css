@@ -75,6 +75,78 @@ nav.site-nav a[aria-current="page"] {
   border-bottom-color: var(--amber);
 }
 
+/* Last nav item (Support) as a rounded pill with a circled arrow */
+nav.site-nav a.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.35rem 0.4rem 0.35rem 1.05rem;
+  border: 1px solid var(--teal-mid);
+  border-radius: 999px;
+  background: var(--teal-dark);
+  color: var(--ink);
+}
+
+nav.site-nav a.nav-pill:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.nav-pill .pill-arrow {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: var(--teal-deep);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Desktop header: wordmark left, links centered, languages right */
+@media (min-width: 900px) {
+  header.site-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    text-align: left;
+    padding: 0.9rem 2rem;
+  }
+
+  header.site-header .wordmark { grid-column: 1; grid-row: 1; justify-self: start; }
+
+  header.site-header .tagline {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+    font-size: 0.8rem;
+    justify-self: start;
+  }
+
+  header.site-header nav.site-nav {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin: 0;
+    align-items: center;
+  }
+
+  header.site-header nav.lang-switcher {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    margin: 0;
+  }
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
 /* ---------- Layout ---------- */
 
 main {
@@ -148,35 +220,335 @@ hr {
   font-style: italic;
 }
 
-/* ---------- Hero (landing page) ---------- */
+/* ---------- Hero showcase shell (landing pages) ----------
+   The hero is a big rounded "cinematic card": the ocean photo
+   fills the shell edge-to-edge behind a teal readability gradient
+   and drifts with a slow Ken-Burns zoom. The page background stays
+   visible around the shell so it reads as a framed showcase.
+   Mobile-first: everything stacks; from 900px the glass stat card
+   pins bottom-left and the App Store cutout carves the bottom-right
+   corner with two inverted-radius SVG fillets. */
 
-.hero {
-  text-align: center;
-  padding: 3.5rem 1.25rem 3rem;
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  /* Calm ocean banner (brand-generated): amber light on teal water,
-     dimmed with a teal gradient so the words always stay readable. */
-  background:
-    linear-gradient(rgba(14, 42, 43, 0.52), rgba(14, 42, 43, 0.85)),
-    url("assets/ocean-hero.jpg") center / cover no-repeat;
+.hero-wrap {
+  padding: 0.75rem 0.75rem 0;
+  max-width: 96rem;
+  margin: 0 auto;
 }
 
+.hero {
+  position: relative;
+  isolation: isolate;          /* keeps the z-index:-1 media layer inside */
+  overflow: hidden;
+  border-radius: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.25rem 1.25rem 1.5rem;
+}
+
+/* Full-bleed ocean layer. The gradient lives on ::after INSIDE this
+   layer so the two scale together and no bright edge ever peeks out.
+   Bottom is darker than before: the glass cards sit down there. */
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("assets/ocean-hero.jpg") center / cover no-repeat;
+  animation: hero-zoom 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(14, 42, 43, 0.55) 0%,
+    rgba(14, 42, 43, 0.62) 45%,
+    rgba(14, 42, 43, 0.92) 100%);
+}
+
+@keyframes hero-zoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+/* "Living water": two oversized, ultra-soft light patches drift
+   across the surface at different speeds/directions, reading as
+   sunlight moving on the water. Pure transform animation (no
+   filters, no repaints) so it stays smooth on phones; the layers
+   are oversized so the drift never exposes an edge. They sit under
+   .hero-media::after, so the readability gradient stays on top. */
+.hero-shimmer {
+  position: absolute;
+  inset: -35%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.hero-shimmer--one {
+  background:
+    radial-gradient(42% 30% at 25% 40%, rgba(255, 217, 172, 0.10), transparent 70%),
+    radial-gradient(30% 22% at 75% 65%, rgba(244, 239, 232, 0.07), transparent 70%);
+  animation: shimmer-one 70s ease-in-out infinite alternate;
+}
+
+.hero-shimmer--two {
+  background:
+    radial-gradient(36% 26% at 70% 30%, rgba(255, 184, 107, 0.09), transparent 70%),
+    radial-gradient(26% 20% at 30% 78%, rgba(244, 239, 232, 0.06), transparent 70%);
+  animation: shimmer-two 90s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer-one {
+  from { transform: translate3d(-4%, -2%, 0); }
+  to   { transform: translate3d(4%, 2.5%, 0); }
+}
+
+@keyframes shimmer-two {
+  from { transform: translate3d(3.5%, 2.5%, 0); }
+  to   { transform: translate3d(-3.5%, -2%, 0); }
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+/* Glass badge above the headline (the page's tagline lives here) */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto 1.4rem;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: rgba(244, 239, 232, 0.12);
+  border: 1px solid rgba(244, 239, 232, 0.22);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.hero-badge svg { color: var(--amber); flex: none; }
+
 .hero h1 {
-  font-size: 2.3rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0 0 1rem;
   text-shadow: 0 1px 12px rgba(11, 20, 20, 0.45);
 }
 
 .hero .melody { color: var(--amber); }
 
 .hero p.lead {
-  font-size: 1.15rem;
-  color: rgba(244, 239, 232, 0.88); /* brighter than ink-dim: sits over the photo */
-  max-width: 34rem;
-  margin: 0 auto 1.75rem;
+  font-size: 1.05rem;
+  color: rgba(244, 239, 232, 0.9); /* brighter than ink-dim: sits over the photo */
+  max-width: 36rem;
+  margin: 0 auto;
   text-shadow: 0 1px 10px rgba(11, 20, 20, 0.45);
+}
+
+/* Floating glass stat card (bottom-left on desktop) */
+.hero-stat {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 26rem;
+  margin: 2rem auto 0;
+  padding: 1.2rem 1.4rem;
+  border-radius: 24px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  background: rgba(244, 239, 232, 0.12);
+  border: 1px solid rgba(244, 239, 232, 0.22);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.stat-number {
+  font-size: 2.7rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(244, 239, 232, 0.82);
+}
+
+.stat-cta {
+  margin-top: 0.9rem;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.45rem 1.2rem;
+  border-radius: 999px;
+  background: var(--amber);
+  color: var(--teal-deep);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.stat-cta:hover { background: var(--amber-soft); color: var(--teal-deep); }
+
+/* App Store corner cutout (bottom-right on desktop).
+   The panel is filled with the PAGE background color and the two
+   quarter-circle SVG fillets repeat that color, so the hero shell
+   looks like it curves around a notch cut out of its corner. */
+.hero-cutout {
+  position: relative;
+  z-index: 3;
+  margin: 1rem auto 0;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.cutout-fillet {
+  display: none;               /* only meaningful on the desktop notch */
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+}
+
+.cutout-fillet path { fill: var(--teal-deep); }
+
+.fillet-top  { right: 0; bottom: 100%; }
+.fillet-side { right: 100%; bottom: 0; }
+
+.cutout-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 44px;
+  padding: 0.85rem 1.15rem;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(244, 239, 232, 0.12);
+  border: 1px solid rgba(244, 239, 232, 0.22);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.cutout-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cutout-copy strong { display: block; font-size: 0.95rem; line-height: 1.35; }
+.cutout-copy small  { color: var(--ink-dim); font-size: 0.8rem; }
+
+.cutout-card:hover .cutout-icon { background: var(--amber); color: var(--teal-deep); }
+
+/* Solid-ish fallback when backdrop-filter isn't supported */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .hero-badge,
+  .hero-stat,
+  .cutout-card {
+    background: rgba(14, 42, 43, 0.85);
+  }
+}
+
+/* Staged entrance: badge rises first, the h1 fades/scales in at
+   0.2s, the lead follows at 0.4s, then the two cards arrive. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes hero-pop {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes hero-slide {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero-badge  { animation: hero-rise  0.7s cubic-bezier(0.22, 0.8, 0.3, 1) both; }
+.hero h1     { animation: hero-pop   0.8s cubic-bezier(0.22, 0.8, 0.3, 1) 0.2s both; }
+.hero p.lead { animation: hero-rise  0.8s cubic-bezier(0.22, 0.8, 0.3, 1) 0.4s both; }
+.hero-stat   { animation: hero-slide 0.8s cubic-bezier(0.22, 0.8, 0.3, 1) 0.55s both; }
+.cutout-card { animation: hero-rise  0.8s cubic-bezier(0.22, 0.8, 0.3, 1) 0.7s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-media,
+  .hero-shimmer,
+  .hero-badge,
+  .hero h1,
+  .hero p.lead,
+  .hero-stat,
+  .cutout-card {
+    animation: none;
+  }
+}
+
+/* Desktop: the shell fills most of the first viewport, the content
+   centers, and the cards take their showcase positions. */
+@media (min-width: 900px) {
+  .hero-wrap { padding: 1rem 1rem 0; }
+
+  .hero {
+    border-radius: 48px;
+    min-height: 92vh;
+    justify-content: center;
+    padding: 4rem 3rem 11rem;
+  }
+
+  .hero h1 { font-size: 3.3rem; }
+
+  .hero p.lead { font-size: 1.2rem; }
+
+  .hero-stat {
+    position: absolute;
+    left: 2.25rem;
+    bottom: 2.25rem;
+    margin: 0;
+    width: 17rem;
+  }
+
+  .hero-cutout {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    width: auto;
+    max-width: none;
+    background: var(--teal-deep);
+    border-top-left-radius: 28px;
+    padding: 12px 0 0 12px;
+  }
+
+  .cutout-fillet { display: block; }
+
+  .cutout-card {
+    background: var(--teal-dark);
+    border-color: var(--teal-mid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    padding: 0.8rem 1.5rem 0.8rem 1rem;
+  }
 }
 
 /* ---------- Buttons ---------- */
