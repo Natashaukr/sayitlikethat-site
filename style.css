@@ -4,14 +4,17 @@
    ============================================================ */
 
 :root {
-  --teal-deep:   #0E2A2B;  /* page background */
-  --teal-dark:   #123435;  /* cards, header */
-  --teal-mid:    #1A4344;  /* borders, hover */
-  --amber:       #FFB86B;  /* accent: links, buttons, stressed words */
-  --amber-soft:  #FFD9AC;  /* lighter accent */
-  --ink:         #F4EFE8;  /* main text */
-  --ink-dim:     #C9C2B6;  /* secondary text */
-  --ink-faint:   #97948C;  /* meta text */
+  /* Turquoise-on-black rebrand (Jul 2026) — matches the app:
+     near-black stage, one bright blue-turquoise accent. The old
+     variable names stay so no page needs edits. */
+  --teal-deep:   #0C1011;  /* page background (near-black) */
+  --teal-dark:   #131819;  /* cards, header */
+  --teal-mid:    #1D2A2E;  /* borders, hover */
+  --amber:       #4CC9E8;  /* accent: links, buttons, stressed words */
+  --amber-soft:  #A9E4F6;  /* lighter accent */
+  --ink:         #F4F7F8;  /* main text */
+  --ink-dim:     #B8C4C7;  /* secondary text */
+  --ink-faint:   #87959A;  /* meta text */
 }
 
 * { box-sizing: border-box; }
@@ -257,16 +260,20 @@ hr {
   background: url("assets/ocean-hero.jpg") center / cover no-repeat;
   animation: hero-zoom 30s ease-in-out infinite alternate;
   will-change: transform;
+  /* Rebrand: nudge the green-teal sea toward blue so the photo
+     agrees with the turquoise accent. */
+  filter: hue-rotate(28deg) saturate(1.02);
 }
 
 .hero-media::after {
   content: "";
   position: absolute;
   inset: 0;
+  /* Near-black scrim (was deep teal) — matches the new page bg. */
   background: linear-gradient(
-    rgba(14, 42, 43, 0.55) 0%,
-    rgba(14, 42, 43, 0.62) 45%,
-    rgba(14, 42, 43, 0.92) 100%);
+    rgba(12, 16, 17, 0.55) 0%,
+    rgba(12, 16, 17, 0.62) 45%,
+    rgba(12, 16, 17, 0.95) 100%);
 }
 
 @keyframes hero-zoom {
