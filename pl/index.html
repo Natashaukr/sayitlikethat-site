@@ -1,129 +1,386 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-itunes-app" content="app-id=6787588368">
-  <title>SayItLikeThat — Mów z amerykańską melodią</title>
-  <meta name="description" content="Niech Twój akcent czaruje, zamiast dezorientować. SayItLikeThat to teleprompter na iOS, który pokazuje melodię amerykańskiego angielskiego — zachowaj akcent, opanuj melodię.">
-  <link rel="stylesheet" href="../style.css">
-  <link rel="alternate" hreflang="en" href="https://sayitlikethat.com/index.html">
-  <link rel="alternate" hreflang="es" href="https://sayitlikethat.com/es/index.html">
-  <link rel="alternate" hreflang="pt-BR" href="https://sayitlikethat.com/pt/index.html">
-  <link rel="alternate" hreflang="uk" href="https://sayitlikethat.com/uk/index.html">
-  <link rel="alternate" hreflang="ru" href="https://sayitlikethat.com/ru/index.html">
-  <link rel="alternate" hreflang="de" href="https://sayitlikethat.com/de/index.html">
-  <link rel="alternate" hreflang="pl" href="https://sayitlikethat.com/pl/index.html">
-  <link rel="alternate" hreflang="x-default" href="https://sayitlikethat.com/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-itunes-app" content="app-id=6787588368">
+<title>SayItLikeThat — Mów z amerykańską melodią</title>
+<meta name="description" content="Mówisz po angielsku — a i tak proszą, żebyś powtórzył? SayItLikeThat pokazuje melodię amerykańskiego angielskiego wprost na twoim tekście. Zachowaj akcent, opanuj rytm.">
+<link rel="alternate" hreflang="en" href="https://sayitlikethat.com/index.html">
+<link rel="alternate" hreflang="es" href="https://sayitlikethat.com/es/index.html">
+<link rel="alternate" hreflang="pt-BR" href="https://sayitlikethat.com/pt/index.html">
+<link rel="alternate" hreflang="uk" href="https://sayitlikethat.com/uk/index.html">
+<link rel="alternate" hreflang="ru" href="https://sayitlikethat.com/ru/index.html">
+<link rel="alternate" hreflang="de" href="https://sayitlikethat.com/de/index.html">
+<link rel="alternate" hreflang="pl" href="https://sayitlikethat.com/pl/index.html">
+<link rel="alternate" hreflang="x-default" href="https://sayitlikethat.com/index.html">
+<style>
+  :root{
+    --ink:#0C1011; --raised:#131819; --line:#1D2A2E;
+    --turq:#4CC9E8; --turq-soft:#A9E4F6;
+    --text:#F4F7F8; --dim:rgba(244,247,248,0.62); --faint:rgba(244,247,248,0.40);
+    --maxw:1000px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  a{color:var(--turq);text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{color:var(--turq);font-size:12.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin:0 0 14px}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(12,16,17,0.72);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{font-weight:800;font-size:18px;letter-spacing:-.01em;color:var(--text)}
+  .brand b{color:var(--turq)}
+  .navlinks{display:flex;align-items:center;gap:26px}
+  .navlinks a{color:var(--dim);font-size:14.5px;font-weight:600}
+  .navlinks a:hover{color:var(--text)}
+  .pill{background:var(--turq);color:#04222B;padding:9px 18px;border-radius:999px;font-weight:800;font-size:14px}
+  .pill:hover{background:#63d4ef}
+  .lang{display:flex;gap:9px;font-size:12.5px;padding-left:14px;margin-left:2px;border-left:1px solid var(--line)}
+  .lang a{color:var(--faint);font-weight:600}
+  .lang a[aria-current]{color:var(--text)}
+  .lang a:hover{color:var(--turq)}
+  @media(max-width:680px){.navlinks a.hideable{display:none}.lang{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:88vh;min-height:88dvh;display:flex;align-items:center;
+    justify-content:center;overflow:hidden;isolation:isolate;text-align:center}
+  .glow{position:absolute;inset:-20%;z-index:0;pointer-events:none;filter:blur(8px);
+    background:radial-gradient(36% 40% at 80% 4%,rgba(76,201,232,0.20),transparent 60%),
+      radial-gradient(30% 36% at 8% 100%,rgba(76,201,232,0.08),transparent 55%)}
+  .vig{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(66% 66% at 50% 40%,transparent 46%,rgba(0,0,0,0.42) 100%)}
+  .hero .wrap{position:relative;z-index:2;padding-top:40px;padding-bottom:40px}
+  h1{margin:0;font-size:clamp(30px,5vw,56px);font-weight:800;line-height:1.04;letter-spacing:-.022em;text-wrap:balance}
+  h1 .dim{color:rgba(244,247,248,0.5);font-weight:700}
+  .hero .sub{margin:26px auto 0;max-width:560px;color:var(--dim);font-size:clamp(15px,1.7vw,18px)}
+  .hero .sub b{color:var(--text);font-weight:700}
+  .cta-row{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .cta{border:0;cursor:pointer;background:var(--turq);color:#04222B;font-family:inherit;font-size:17px;
+    font-weight:800;padding:15px 34px;border-radius:999px;box-shadow:0 10px 30px rgba(76,201,232,0.28);
+    transition:transform .15s,box-shadow .2s,background .2s;display:inline-block}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(76,201,232,0.42);background:#63d4ef}
+  .cta:active{transform:translateY(0) scale(.98)}
+  .cta:focus-visible{outline:3px solid var(--turq-soft);outline-offset:3px}
+  .replay{background:none;border:0;color:var(--faint);font-family:inherit;font-size:13px;cursor:pointer}
+  .replay:hover{color:var(--turq)}
+
+  /* ---------- melody motif (reusable) ---------- */
+  .melody{position:relative}
+  .mstage{position:relative;padding:64px 0 56px}
+  .mline{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1}
+  .melody path{fill:none;stroke:var(--turq);stroke-width:2.4;stroke-linecap:round;
+    filter:drop-shadow(0 0 9px rgba(76,201,232,0.55));opacity:.9}
+  .melody .head{fill:var(--turq-soft);filter:drop-shadow(0 0 12px rgba(76,201,232,0.95));opacity:0}
+  .line{position:relative;z-index:2;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;
+    gap:clamp(6px,1.1vw,14px);font-size:clamp(24px,4vw,46px)}
+  .w{display:inline-block;white-space:nowrap;transform:translateY(var(--ty,0));
+    transition:transform .55s cubic-bezier(.22,.9,.24,1),color .55s,font-size .55s,text-shadow .4s}
+  .glide{color:rgba(244,247,248,0.34);font-weight:500;font-size:.60em}
+  .punch{color:var(--turq);font-weight:800}
+  .punch.big{font-size:1.05em}
+  .rise{font-size:.4em;color:var(--turq);font-weight:700;position:relative;top:-.75em;left:.05em;opacity:.85}
+  .line.is-flat .w{transform:translateY(0)!important;color:rgba(244,247,248,0.26)!important;
+    font-weight:500!important;font-size:.64em!important;text-shadow:none!important}
+  @keyframes punchPulse{0%{text-shadow:0 0 0 rgba(76,201,232,0)}40%{text-shadow:0 0 26px rgba(76,201,232,0.9)}100%{text-shadow:0 0 13px rgba(76,201,232,0.32)}}
+  .w.pulse{animation:punchPulse .6s ease}
+  .w.lit{filter:brightness(1.22)}.w.punch.lit{text-shadow:0 0 24px rgba(76,201,232,0.9)}.w.glide.lit{color:rgba(244,247,248,0.72)}
+  /* respect to the flag — click sends a turquoise ripple and a gust through the words */
+  .hero .ripple{position:absolute;z-index:1;border-radius:50%;pointer-events:none;
+    border:1.5px solid rgba(76,201,232,0.45);transform:translate(-50%,-50%) scale(0);
+    animation:rip 1.15s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rip{0%{transform:translate(-50%,-50%) scale(0);opacity:.7}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+  @keyframes gustBob{0%{transform:translateY(var(--ty,0))}42%{transform:translateY(calc(var(--ty,0px) - 15px))}100%{transform:translateY(var(--ty,0))}}
+  .w.gust{animation:gustBob .6s cubic-bezier(.3,.8,.3,1)}
+
+  /* ---------- sections ---------- */
+  section.band{padding:96px 0;border-top:1px solid var(--line)}
+  .band h2{font-size:clamp(24px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;margin:0 0 16px;line-height:1.12;text-wrap:balance}
+  .band p.lead{color:var(--dim);font-size:clamp(16px,1.9vw,19px);max-width:620px;margin:0}
+  .center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
+
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:44px}
+  @media(max-width:680px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--raised);border:1px solid var(--line);border-radius:16px;padding:26px 24px}
+  .step .n{color:var(--turq);font-weight:800;font-size:14px;letter-spacing:.04em}
+  .step h3{margin:10px 0 8px;font-size:19px;font-weight:800}
+  .step p{margin:0;color:var(--dim);font-size:15.5px}
+
+  .price{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:44px}
+  @media(max-width:680px){.price{grid-template-columns:1fr}}
+  .card{background:var(--raised);border:1px solid var(--line);border-radius:18px;padding:30px 28px}
+  .card.hi{border-color:rgba(76,201,232,0.45);box-shadow:0 0 0 1px rgba(76,201,232,0.15),0 20px 50px rgba(0,0,0,0.35)}
+  .card .tag{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .card.hi .tag{color:var(--turq)}
+  .card .big{font-size:30px;font-weight:800;margin:8px 0 2px}
+  .card .note{color:var(--dim);font-size:14.5px;margin:0 0 16px}
+  .card ul{list-style:none;padding:0;margin:0 0 20px}
+  .card li{color:var(--dim);font-size:15px;padding:7px 0 7px 26px;position:relative}
+  .card li::before{content:"";position:absolute;left:0;top:13px;width:12px;height:8px;
+    border-left:2px solid var(--turq);border-bottom:2px solid var(--turq);transform:rotate(-45deg)}
+
+  .final{position:relative;overflow:hidden;text-align:center;padding:110px 0}
+  .final .glow2{position:absolute;inset:-30%;z-index:0;pointer-events:none;filter:blur(10px);
+    background:radial-gradient(40% 50% at 50% 0%,rgba(76,201,232,0.18),transparent 60%)}
+  .final .wrap{position:relative;z-index:2}
+
+  footer{border-top:1px solid var(--line);padding:44px 0;color:var(--faint)}
+  footer .row{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+  footer .brand{font-size:16px}
+  footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
+  footer .flinks a{color:var(--dim);font-size:14px}
+  footer .flinks a:hover{color:var(--turq)}
+  footer .legal{margin-top:20px;font-size:13px;color:var(--faint);line-height:1.7}
+
+  /* reveal motion */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.w,.cta{transition:none}}
+</style>
 </head>
 <body>
+<h2 class="sr-only">SayItLikeThat uczy melodii amerykańskiego angielskiego — które słowa zaakcentować, a które połknąć — wprost na twoim tekście, żeby akcent brzmiał ciepło, a nie obco.</h2>
 
-<header class="site-header">
-  <a class="wordmark" href="index.html">SayIt<span>Like</span>That</a>
-  <nav class="site-nav">
-    <a href="index.html" aria-current="page">Start</a>
-    <a href="blog/index.html">Blog</a>
-    <a href="checklist.html">Darmowa checklista</a>
-    <a class="nav-pill" href="../support.html">Wsparcie<span class="pill-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></span></a>
-  </nav>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">SayIt<b>Like</b>That</a>
+    <div class="navlinks">
+      <a class="hideable" href="#how">Jak to działa</a>
+      <a class="hideable" href="#melody">Melodia</a>
+      <a class="hideable" href="#pricing">Ceny</a>
+      <span class="lang" aria-label="Language">
+        <a href="../index.html">EN</a>
+        <a href="../es/index.html">ES</a>
+        <a href="../pt/index.html">PT</a>
+        <a href="../uk/index.html">UK</a>
+        <a href="../ru/index.html">RU</a>
+        <a href="../de/index.html">DE</a>
+        <a href="index.html" aria-current="true">PL</a>
+      </span>
+      <a class="pill" href="#free">Darmowy przewodnik</a>
+    </div>
+  </div>
+</nav>
 
-  <nav class="lang-switcher" aria-label="Language">
-    <a href="../index.html">EN</a> ·
-    <a href="../es/index.html">ES</a> ·
-    <a href="../pt/index.html">PT</a> ·
-    <a href="../uk/index.html">UK</a> ·
-    <a href="../ru/index.html">RU</a> ·
-    <a href="../de/index.html">DE</a> ·
-    <a href="../pl/index.html" aria-current="true">PL</a>
-  </nav>
+<header class="hero" id="top">
+  <div class="glow"></div><div class="vig"></div>
+  <div class="wrap">
+    <p class="eyebrow">SayItLikeThat</p>
+    <h1>Mówisz po angielsku.<br><span class="dim">A i tak proszą, żebyś powtórzył.</span></h1>
+    <div class="melody" style="margin:26px 0 6px">
+      <div class="mstage">
+        <svg class="mline" aria-hidden="true"><path/><circle class="head" r="4"/></svg>
+        <div class="line is-flat" data-hero>
+          <span class="w glide" data-y="12">To</span>
+          <span class="w punch" data-y="-30">nie</span>
+          <span class="w punch big" data-y="-48">gramatyka.</span>
+          <span class="w glide" data-y="6">To</span>
+          <span class="w punch" data-y="-32">melodia.<span class="rise">↗</span></span>
+        </div>
+      </div>
+    </div>
+    <p class="sub">Słowa, które <b>akcentujesz</b>, i te, które możesz połknąć — zaznaczone wprost na twoim tekście.</p>
+    <div class="cta-row">
+      <a class="cta" href="#free">Zacznij od darmowego przewodnika</a>
+      <button class="replay" id="replay" type="button">↺ zobacz jeszcze raz</button>
+    </div>
+  </div>
 </header>
 
-<div class="hero-wrap">
-  <section class="hero">
-    <div class="hero-media" aria-hidden="true">
-      <div class="hero-shimmer hero-shimmer--one"></div>
-      <div class="hero-shimmer hero-shimmer--two"></div>
+<section class="band" id="feeling">
+  <div class="wrap reveal">
+    <p class="eyebrow">Znajome?</p>
+    <h2>Mówisz poprawnie. A i tak słyszysz „przepraszam, co?”</h2>
+    <p class="lead">Przećwiczyłeś zdanie dziesięć razy. Znasz każde słowo. I w chwili, gdy wychodzi z ust, twarz rozmówcy robi to lekko zdezorientowane coś — a ty trochę się kurczysz. To nie twoje słownictwo. To nie twoja gramatyka. To rytm, którego nikt cię nie nauczył.</p>
+  </div>
+</section>
+
+<section class="band center" id="melody">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Rozwiązanie</p>
+      <h2>Każde angielskie zdanie ma rytm.</h2>
+      <p class="lead">Niektóre słowa uderza się mocno. Małe niemal znikają. Głos wznosi się, potem opada. Rodzimy słuch nie ocenia twojego akcentu — czuje, czy złapałeś rytm. Złap go, a ten sam głos brzmi ciepło i pewnie.</p>
     </div>
-
-    <div class="hero-inner">
-      <p class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3c.7 4.5 3.5 7.3 8 8-4.5.7-7.3 3.5-8 8-.7-4.5-3.5-7.3-8-8 4.5-.7 7.3-3.5 8-8z"/></svg> Mów z amerykańską melodią</p>
-      <h1>Niech Twój akcent <span class="melody">czaruje</span>, zamiast dezorientować.</h1>
-      <p class="lead"><strong>Zachowaj swój akcent. Opanuj melodię.</strong> SayItLikeThat to teleprompter na iPhone'a, który nie tylko pokazuje słowa — pokazuje też, <em>jak</em> je wypowiedzieć. Akcentowane wyrazy podświetlają się, więc Twój głos wznosi się i opada dokładnie tak, jak naprawdę brzmi amerykański angielski. Mów naturalnie, wyglądaj pewnie, mów z amerykańską melodią.</p>
+    <div class="melody reveal" style="margin-top:30px" data-scroll>
+      <div class="mstage">
+        <svg class="mline" aria-hidden="true"><path/><circle class="head" r="4"/></svg>
+        <div class="line is-flat">
+          <span class="w punch big" data-y="-40">Naprawdę</span>
+          <span class="w punch" data-y="-30">myślę,</span>
+          <span class="w glide" data-y="10">że</span>
+          <span class="w glide" data-y="0">powinniśmy</span>
+          <span class="w punch" data-y="-36">porozmawiać.</span>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <aside class="hero-stat">
-      <span class="stat-number">7</span>
-      <span class="stat-label">języków na tej stronie</span>
-      <a class="stat-cta" href="checklist.html">Odbierz darmową checklistę</a>
-    </aside>
-
-    <!-- ============================================================
-         APP STORE LINK PLACEHOLDER
-         When the app is live, replace the href below with the real
-         App Store URL, e.g. https://apps.apple.com/app/id0000000000
-         and change the title text to "Download on the App Store".
-         ============================================================ -->
-    <div class="hero-cutout" id="app-store-cta">
-      <svg class="cutout-fillet fillet-top" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M28 0A28 28 0 0 1 0 28L28 28Z"/></svg>
-      <svg class="cutout-fillet fillet-side" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M28 0A28 28 0 0 1 0 28L28 28Z"/></svg>
-      <a class="cutout-card" href="https://apps.apple.com/app/id6787588368">
-        <span class="cutout-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></span>
-        <span class="cutout-copy">
-          <strong>App Store — już wkrótce</strong>
-          <small>Za darmo · 7-dniowy okres próbny</small>
-        </span>
-      </a>
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">Jak to działa</p><h2>Cztery kroki. Wkładasz angielski, wychodzi pewność.</h2></div>
+    <div class="steps">
+      <div class="step reveal" style="--d:0ms"><div class="n">01</div><h3>Wklej swój angielski</h3><p>Przemówienie, odpowiedź na rozmowie, scenariusz do wideo. Tylko po angielsku — i nieporadnie też jest zupełnie w porządku.</p></div>
+      <div class="step reveal" style="--d:80ms"><div class="n">02</div><h3>Zobacz melodię</h3><p>Aplikacja zaznacza, które słowa zaakcentować, a które połknąć. Automatycznie, gdy tylko wkleisz.</p></div>
+      <div class="step reveal" style="--d:160ms"><div class="n">03</div><h3>Czytaj na głos</h3><p>Teleprompter bez rąk prowadzi cię. Posłuchaj siebie raz — a potem znika na zawsze.</p></div>
+      <div class="step reveal" style="--d:240ms"><div class="n">04</div><h3>Nagraj siebie</h3><p>Słowa są przy obiektywie, więc patrzysz ludziom w oczy. Dodaj napisy i opublikuj.</p></div>
     </div>
-  </section>
-</div>
+  </div>
+</section>
 
-<main>
-
-  <section class="features">
-    <div class="feature">
-      <h3>Teleprompter, który pokazuje melodię</h3>
-      <p>Twój scenariusz przewija się z najważniejszymi słowami <strong>wyróżnionymi na bursztynowo</strong>. Słowa znaczące uderzają, te drobne prześlizgują się — czytasz rytm, a nie tylko tekst.</p>
+<section class="band center" id="pricing">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">Ile kosztuje</p><h2>Za darmo na start. Uczciwie dalej.</h2></div>
+    <div class="price">
+      <div class="card reveal" style="text-align:left"><div class="tag">Za darmo na zawsze</div>
+        <div class="big">$0</div><p class="note">Bez konta. Bez karty. Nic nie opuszcza twojego telefonu.</p>
+        <ul><li>Dwa własne teksty</li><li>Wszystkie pakiety ćwiczeń</li><li>Teleprompter melodii</li><li>Posłuchaj siebie</li></ul>
+      </div>
+      <div class="card hi reveal" style="text-align:left;--d:100ms"><div class="tag">Premium</div>
+        <div class="big">$4.99<span style="font-size:16px;font-weight:600;color:var(--dim)">/mies</span></div>
+        <p class="note">7 dni za darmo. Albo zapłać raz — $44.99 — i jest twoje na zawsze.</p>
+        <ul><li>Nielimitowane teksty</li><li>Nagrywanie wideo z napisami</li><li>Siedem stylów napisów, filtry, efekty</li><li>Wszystkie formaty: Reels, TikTok, YouTube</li></ul>
+      </div>
     </div>
-    <div class="feature">
-      <h3>Nagrywaj siebie z melodią w napisach</h3>
-      <p>Filmuj prosto z aplikacji, a podświetlony scenariusz zostaje tuż przy obiektywie. Twój wzrok nie ucieka, Twoje wystąpienie brzmi naturalnie, a każde ujęcie zapisuje się na telefonie.</p>
+    <p class="lead center" style="margin-top:22px;font-size:14.5px;color:var(--faint)">Anuluj kiedy chcesz w ustawieniach iPhone’a. Wszystko, co tworzysz, jest twoje.</p>
+  </div>
+</section>
+
+<section class="final" id="free">
+  <div class="glow2"></div>
+  <div class="wrap reveal">
+    <p class="eyebrow">Zacznij od najłatwiejszego</p>
+    <h2 style="font-size:clamp(26px,3.8vw,42px);font-weight:800;letter-spacing:-.02em;margin:0 0 14px">Pobierz darmowy przewodnik.</h2>
+    <p class="lead center" style="margin:0 auto 26px">Najszybsze triki, żeby brzmieć po amerykańsku — bez aplikacji. A gdy będziesz gotowy, przeczytaj własne słowa z melodią.</p>
+    <a class="cta" href="../checklist.html">Pobierz darmowy przewodnik</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <div class="brand"><span style="font-weight:800">SayIt<b style="color:var(--turq)">Like</b>That</span> · <span style="color:var(--dim)">Mów z amerykańską melodią</span></div>
+      <div class="flinks">
+        <a href="../privacy.html">Prywatność</a>
+        <a href="../support.html">Wsparcie</a>
+        <a href="../blog/index.html">Blog</a>
+        <a href="../checklist.html">Darmowy przewodnik</a>
+      </div>
     </div>
-    <div class="feature">
-      <h3>Usłysz własne postępy</h3>
-      <p>Odtwarzaj swoje ujęcia obok siebie i wsłuchaj się w melodię. Tydzień po tygodniu usłyszysz, jak płaskie, mechaniczne brzmienie znika — postęp, który naprawdę czuć.</p>
-    </div>
-  </section>
-
-  <h2 style="text-align:center;">Zobacz, jak to działa</h2>
-
-  <!-- ============================================================
-       SCREENSHOT PLACEHOLDERS
-       Replace each div below with a real screenshot, e.g.:
-       <img src="images/screen-1.png" alt="Teleprompter with melody highlights" style="width:100%; border-radius:24px;">
-       ============================================================ -->
-  <section class="screens">
-    <div class="screen-placeholder"><img src="../assets/app-prompter.jpg" alt="SayItLikeThat teleprompter with amber melody words highlighted" loading="lazy" width="640" height="1390"></div>
-    <div class="screen-placeholder"><img src="../assets/app-library.jpg" alt="SayItLikeThat library with practice packs" loading="lazy" width="640" height="1390"></div>
-    <div class="screen-placeholder"><img src="../assets/app-done.jpg" alt="Practice finished — Record now button" loading="lazy" width="640" height="1390"></div>
-  </section>
-
-  <section class="cta-box">
-    <h2>Jeszcze nie chcesz pobierać? Zacznij za darmo.</h2>
-    <p>Pobierz 5-minutową checklistę naturalności przed kamerą — dokładnie tę rutynę przed nagraniem, którą polecamy każdej osobie występującej przed kamerą.</p>
-    <a class="btn-ghost" href="checklist.html">Odbierz darmową checklistę</a>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <p>© 2026 Natasha Lucas · Wszelkie prawa zastrzeżone · Stworzone w duchu SayItLikeThat</p>
-  <p class="foot-links">
-    <a href="../privacy.html">Prywatność</a> ·
-    <a href="../support.html">Wsparcie</a> ·
-    <a href="blog/index.html">Blog</a>
-  </p>
+    <p class="flang" style="margin-top:22px;font-size:13.5px;color:var(--dim)"><a href="../index.html">English</a> ·
+      <a href="../es/index.html">Español</a> ·
+      <a href="../pt/index.html">Português</a> ·
+      <a href="../uk/index.html">Українська</a> ·
+      <a href="../ru/index.html">Русский</a> ·
+      <a href="../de/index.html">Deutsch</a> ·
+      Polski</p>
+    <p class="legal">© 2026 Natasha Lucas. Wszelkie prawa zastrzeżone. SayItLikeThat™ i znak melodii to aktywa marki Natasha Lucas.<br>Stworzone na iPhone’a. Twoja praktyka angielskiego pozostaje angielska — nic nie jest tłumaczone, nic nie jest zapisywane, nic nie opuszcza twojego urządzenia.</p>
+  </div>
 </footer>
 
-<script src="../reveal.js" defer></script>
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function centers(stage,words){var sb=stage.getBoundingClientRect();
+    return words.map(function(w){var r=w.getBoundingClientRect();
+      return {x:r.left-sb.left+r.width/2,y:r.top-sb.top+r.height/2};});}
+  function buildPath(p){if(p.length<2)return '';var d='M '+p[0].x.toFixed(1)+' '+p[0].y.toFixed(1),t=.16;
+    for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;
+      d+=' C '+(b.x+(c.x-a.x)*t).toFixed(1)+' '+(b.y+(c.y-a.y)*t).toFixed(1)+', '+
+        (c.x-(e.x-b.x)*t).toFixed(1)+' '+(c.y-(e.y-b.y)*t).toFixed(1)+', '+c.x.toFixed(1)+' '+c.y.toFixed(1);}
+    return d;}
+
+  function melodyParts(mel){return{stage:mel.querySelector('.mstage'),svg:mel.querySelector('.mline'),
+    path:mel.querySelector('path'),head:mel.querySelector('.head'),line:mel.querySelector('.line'),
+    words:[].slice.call(mel.querySelectorAll('.w'))};}
+
+  function setTy(p){p.words.forEach(function(w){w.style.setProperty('--ty',(w.getAttribute('data-y')||0)+'px');});}
+
+  function draw(p,animate){
+    p.path.setAttribute('d',buildPath(centers(p.stage,p.words)));
+    var len=p.path.getTotalLength();
+    if(!animate||reduce){p.path.style.strokeDasharray='none';p.path.style.strokeDashoffset=0;if(p.head)p.head.style.opacity=0;return;}
+    p.path.style.strokeDasharray=len;p.path.style.strokeDashoffset=len;p.path.getBoundingClientRect();
+    var dur=1200,start=null;if(p.head)p.head.style.opacity=1;
+    function fr(ts){if(!start)start=ts;var q=Math.min((ts-start)/dur,1),e=1-Math.pow(1-q,3);
+      p.path.style.strokeDashoffset=len*(1-e);
+      if(p.head){var pt=p.path.getPointAtLength(len*e);p.head.setAttribute('cx',pt.x);p.head.setAttribute('cy',pt.y);}
+      if(q<1)requestAnimationFrame(fr);else if(p.head)p.head.style.opacity=0;}
+    requestAnimationFrame(fr);
+  }
+
+  function lift(p,pulse){
+    p.words.forEach(function(w,i){w.style.transitionDelay=(i*56)+'ms';});
+    p.line.classList.remove('is-flat');
+    if(pulse){p.words.forEach(function(w,i){if(w.classList.contains('punch')){
+      setTimeout(function(){w.classList.add('pulse');setTimeout(function(){w.classList.remove('pulse');},600);},640+i*56);}});}
+    setTimeout(function(){p.words.forEach(function(w){w.style.transitionDelay='';});},700+p.words.length*56);
+  }
+
+  // HERO
+  var heroMel=document.querySelector('.hero .melody');
+  if(heroMel){
+    var hp=melodyParts(heroMel);setTy(hp);
+    var replay=document.getElementById('replay'),beatTimer=null,paused=false,tos=[];
+    function clearAll(){tos.forEach(clearTimeout);tos=[];clearTimeout(beatTimer);
+      hp.words.forEach(function(w){w.classList.remove('lit','pulse');w.style.transitionDelay='';});}
+    function beat(){var i=0;(function step(){if(paused)return;hp.words.forEach(function(w){w.classList.remove('lit');});
+      var w=hp.words[i];w.classList.add('lit');var pu=w.classList.contains('punch');i++;var d=pu?520:300;
+      if(i>=hp.words.length){i=0;d=1600;}beatTimer=setTimeout(function(){w.classList.remove('lit');step();},d);})();}
+    function runHero(){clearAll();paused=false;
+      if(reduce){hp.line.classList.remove('is-flat');draw(hp,false);replay.style.display='none';return;}
+      hp.line.classList.add('is-flat');hp.path.style.strokeDasharray='1';hp.path.style.strokeDashoffset='1';hp.head.style.opacity=0;
+      tos.push(setTimeout(function(){lift(hp,true);},700));
+      tos.push(setTimeout(function(){draw(hp,true);},700+hp.words.length*56+360));
+      tos.push(setTimeout(beat,700+hp.words.length*56+360+1350));}
+    hp.words.forEach(function(w){
+      w.addEventListener('mouseenter',function(){paused=true;clearTimeout(beatTimer);
+        hp.words.forEach(function(x){x.classList.remove('lit');});w.classList.add('lit');});
+      w.addEventListener('mouseleave',function(){w.classList.remove('lit');clearTimeout(beatTimer);
+        beatTimer=setTimeout(function(){paused=false;beat();},1200);});});
+    if(!reduce){var hero=document.querySelector('.hero');
+      hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();
+        hp.stage.style.transform='rotateY('+(((e.clientX-r.left)/r.width-.5)*8).toFixed(2)+'deg) rotateX('+((-((e.clientY-r.top)/r.height-.5))*5).toFixed(2)+'deg)';});
+      hero.addEventListener('mouseleave',function(){hp.stage.style.transform='';});
+      hp.stage.style.transformStyle='preserve-3d';hp.stage.parentElement.style.perspective='1100px';
+      // click anywhere on the hero → a turquoise ripple + a gust of wind through the words
+      hero.addEventListener('pointerdown',function(e){
+        if(e.target.closest('a')||e.target.closest('button'))return;
+        var r=hero.getBoundingClientRect(),size=Math.max(r.width,r.height)*0.9;
+        var rp=document.createElement('div');rp.className='ripple';
+        rp.style.width=rp.style.height=size+'px';
+        rp.style.left=(e.clientX-r.left)+'px';rp.style.top=(e.clientY-r.top)+'px';
+        hero.appendChild(rp);setTimeout(function(){rp.remove();},1150);
+        hp.words.forEach(function(w,i){setTimeout(function(){w.classList.add('gust');
+          setTimeout(function(){w.classList.remove('gust');},600);},i*45);});
+      });}
+    replay.addEventListener('click',runHero);
+    window.addEventListener('resize',function(){draw(hp,false);});
+    window.addEventListener('load',function(){setTimeout(runHero,80);});
+  }
+
+  // reveals + section melody
+  var revs=[].slice.call(document.querySelectorAll('.reveal'));
+  var sectionMels=[].slice.call(document.querySelectorAll('.melody[data-scroll]')).map(function(m){var p=melodyParts(m);setTy(p);return p;});
+  if(reduce){revs.forEach(function(r){r.classList.add('in');});sectionMels.forEach(function(p){p.line.classList.remove('is-flat');draw(p,false);});}
+  else if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting){en.target.classList.add('in');
+        var mel=en.target.querySelector?en.target.querySelector('.melody[data-scroll]'):null;
+        var found=sectionMels.filter(function(p){return p.line.closest('.reveal')===en.target;})[0];
+        if(found&&!found._done){found._done=true;setTimeout(function(){lift(found,true);draw(found,true);},180);}
+        io.unobserve(en.target);}});},{threshold:0.25});
+    revs.forEach(function(r){io.observe(r);});
+  } else {revs.forEach(function(r){r.classList.add('in');});sectionMels.forEach(function(p){p.line.classList.remove('is-flat');draw(p,false);});}
+})();
+</script>
 </body>
 </html>
