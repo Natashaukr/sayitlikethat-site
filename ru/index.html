@@ -142,6 +142,15 @@
   .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
   .reveal.in{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.w,.cta{transition:none}}
+
+  /* app screens gallery */
+  .shots{display:flex;gap:20px;overflow-x:auto;padding:44px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .shots::-webkit-scrollbar{height:8px}
+  .shots::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+  .shot{flex:0 0 auto;scroll-snap-align:center;background:#05080A;padding:8px;border-radius:32px;
+    box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06)}
+  .shot img{display:block;width:216px;height:auto;border-radius:24px}
+  @media(max-width:680px){.shot img{width:180px}}
 </style>
 </head>
 <body>
@@ -234,6 +243,20 @@
       <div class="step reveal" style="--d:80ms"><div class="n">02</div><h3>Увидьте мелодию</h3><p>Приложение отмечает, какие слова подчеркнуть, а какие проглотить. Автоматически, как только вы вставили текст.</p></div>
       <div class="step reveal" style="--d:160ms"><div class="n">03</div><h3>Читайте вслух</h3><p>Суфлёр ведёт вас без рук. Послушайте себя один раз — и потом это исчезает навсегда.</p></div>
       <div class="step reveal" style="--d:240ms"><div class="n">04</div><h3>Запишите себя</h3><p>Слова стоят у объектива, чтобы вы смотрели в глаза. Добавьте субтитры и публикуйте.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band center" id="screens">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">Посмотрите в действии</p><h2>Всё приложение — в шести экранах.</h2></div>
+    <div class="shots reveal">
+      <div class="shot"><img src="../assets/app/1-prompter.jpg" alt="" loading="lazy" width="216"></div>
+      <div class="shot"><img src="../assets/app/2-camera-armed.jpg" alt="" loading="lazy" width="216"></div>
+      <div class="shot"><img src="../assets/app/3-library.jpg" alt="" loading="lazy" width="216"></div>
+      <div class="shot"><img src="../assets/app/4-done-card.jpg" alt="" loading="lazy" width="216"></div>
+      <div class="shot"><img src="../assets/app/5-playback-styles.jpg" alt="" loading="lazy" width="216"></div>
+      <div class="shot"><img src="../assets/app/6-paywall.jpg" alt="" loading="lazy" width="216"></div>
     </div>
   </div>
 </section>

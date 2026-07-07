@@ -142,6 +142,15 @@
   .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
   .reveal.in{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.w,.cta{transition:none}}
+
+  /* app screens gallery */
+  .shots{display:flex;gap:20px;overflow-x:auto;padding:44px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .shots::-webkit-scrollbar{height:8px}
+  .shots::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+  .shot{flex:0 0 auto;scroll-snap-align:center;background:#05080A;padding:8px;border-radius:32px;
+    box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06)}
+  .shot img{display:block;width:216px;height:auto;border-radius:24px}
+  @media(max-width:680px){.shot img{width:180px}}
 </style>
 </head>
 <body>
@@ -238,6 +247,21 @@
       <div class="step reveal" style="--d:80ms"><div class="n">02</div><h3>See the melody</h3><p>The app marks which words to punch and which to glide. Automatically, the moment you paste.</p></div>
       <div class="step reveal" style="--d:160ms"><div class="n">03</div><h3>Read it out loud</h3><p>A hands-free teleprompter carries you through. Listen back to yourself once — then it's gone for good.</p></div>
       <div class="step reveal" style="--d:240ms"><div class="n">04</div><h3>Record yourself</h3><p>Your words sit right by the lens, so you look people in the eye. Style it with captions, post it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- APP SCREENS -->
+<section class="band center" id="screens">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">See it in action</p><h2>The whole app, in six screens.</h2></div>
+    <div class="shots reveal">
+      <div class="shot"><img src="assets/app/1-prompter.jpg" alt="The melody teleprompter, stressed words in turquoise" loading="lazy" width="216"></div>
+      <div class="shot"><img src="assets/app/2-camera-armed.jpg" alt="Recording with the script by the lens" loading="lazy" width="216"></div>
+      <div class="shot"><img src="assets/app/3-library.jpg" alt="Your library and practice packs" loading="lazy" width="216"></div>
+      <div class="shot"><img src="assets/app/4-done-card.jpg" alt="Practice done, record now" loading="lazy" width="216"></div>
+      <div class="shot"><img src="assets/app/5-playback-styles.jpg" alt="Caption styles, filters and ratios" loading="lazy" width="216"></div>
+      <div class="shot"><img src="assets/app/6-paywall.jpg" alt="Premium, free trial or lifetime" loading="lazy" width="216"></div>
     </div>
   </div>
 </section>

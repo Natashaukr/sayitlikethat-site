@@ -241,6 +241,19 @@ const T = {
   }
 };
 
+const SC = {
+  es: { eye: 'Míralo en acción', h: 'Toda la app, en seis pantallas.' },
+  pt: { eye: 'Veja em ação', h: 'O app inteiro, em seis telas.' },
+  uk: { eye: 'Подивіться в дії', h: 'Увесь застосунок — у шести екранах.' },
+  ru: { eye: 'Посмотрите в действии', h: 'Всё приложение — в шести экранах.' },
+  de: { eye: 'In Aktion sehen', h: 'Die ganze App, in sechs Screens.' },
+  pl: { eye: 'Zobacz w akcji', h: 'Cała aplikacja, w sześciu ekranach.' }
+};
+const SHOT_FILES = ['1-prompter', '2-camera-armed', '3-library', '4-done-card', '5-playback-styles', '6-paywall'];
+function shotsMarkup() {
+  return SHOT_FILES.map(f => `      <div class="shot"><img src="../assets/app/${f}.jpg" alt="" loading="lazy" width="216"></div>`).join('\n');
+}
+
 function navLang(cur) {
   return ORDER.map(l => {
     const href = l === 'en' ? '../index.html' : (l === cur ? 'index.html' : '../' + l + '/index.html');
@@ -345,6 +358,15 @@ ${mel(t.secWords)}
     <div class="reveal"><p class="eyebrow">${t.howEye}</p><h2>${t.howH}</h2></div>
     <div class="steps">
 ${steps}
+    </div>
+  </div>
+</section>
+
+<section class="band center" id="screens">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">${SC[cur].eye}</p><h2>${SC[cur].h}</h2></div>
+    <div class="shots reveal">
+${shotsMarkup()}
     </div>
   </div>
 </section>
