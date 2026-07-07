@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayItLikeThat — hero</title>
+<style>
+  :root{
+    --ink:#0C1011; --raised:#131819; --line:#1D2A2E;
+    --turq:#4CC9E8; --turq-soft:#A9E4F6;
+    --text:#F4F7F8; --dim:rgba(244,247,248,0.55); --faint:rgba(244,247,248,0.40);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  .hero{position:relative;width:100%;min-height:100vh;min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate}
+  .glow{position:absolute;inset:-20%;z-index:0;pointer-events:none;filter:blur(8px);
+    background:
+      radial-gradient(36% 40% at 80% 6%, rgba(76,201,232,0.20), transparent 60%),
+      radial-gradient(32% 38% at 10% 98%, rgba(76,201,232,0.09), transparent 55%);}
+  .vignette{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(65% 65% at 50% 42%, transparent 45%, rgba(0,0,0,0.4) 100%);}
+
+  .inner{position:relative;z-index:2;width:100%;max-width:900px;padding:56px 40px;text-align:center}
+  .eyebrow{margin:0 0 22px;color:var(--turq);font-size:13px;font-weight:700;
+    letter-spacing:.2em;text-transform:uppercase}
+  .headline{margin:0;color:var(--text);font-size:clamp(30px,4.8vw,54px);font-weight:800;
+    line-height:1.05;letter-spacing:-.022em;text-wrap:balance}
+  .headline .dim{color:rgba(244,247,248,0.5);font-weight:700}
+
+  .stage-wrap{perspective:1100px;margin:30px 0 20px}
+  .stage{position:relative;padding:74px 0 64px;transform-style:preserve-3d;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1);will-change:transform}
+  .msvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1}
+  #mpath{fill:none;stroke:var(--turq);stroke-width:2.5;stroke-linecap:round;
+    filter:drop-shadow(0 0 9px rgba(76,201,232,0.6));opacity:.92}
+  #head{fill:var(--turq-soft);filter:drop-shadow(0 0 12px rgba(76,201,232,0.95));opacity:0}
+
+  .line{position:relative;z-index:2;display:flex;flex-wrap:nowrap;align-items:center;
+    justify-content:center;gap:clamp(6px,1.1vw,14px);font-size:clamp(26px,4.2vw,50px)}
+  .w{display:inline-block;white-space:nowrap;transform:translateY(var(--ty,0));
+    transition:transform .55s cubic-bezier(.22,.9,.24,1),color .55s ease,font-size .55s ease,text-shadow .4s ease}
+  .glide{color:rgba(244,247,248,0.34);font-weight:500;font-size:.60em}
+  .punch{color:var(--turq);font-weight:800;text-shadow:0 0 0 rgba(76,201,232,0)}
+  .punch.big{font-size:1.06em}
+  .rise{font-size:.4em;color:var(--turq);font-weight:700;position:relative;top:-.75em;left:.05em;opacity:.85}
+
+  /* FLAT state — how speech feels before the app */
+  .line.is-flat .w{transform:translateY(0)!important;color:rgba(244,247,248,0.26)!important;
+    font-weight:500!important;font-size:.64em!important;text-shadow:none!important}
+
+  /* the punch pulse as a word "turns on" */
+  @keyframes punchPulse{0%{text-shadow:0 0 0 rgba(76,201,232,0)}
+    40%{text-shadow:0 0 26px rgba(76,201,232,0.9)}100%{text-shadow:0 0 14px rgba(76,201,232,0.35)}}
+  .w.pulse{animation:punchPulse .6s ease}
+
+  /* traveling beat */
+  .w.lit{filter:brightness(1.22)}
+  .w.punch.lit{text-shadow:0 0 24px rgba(76,201,232,0.9)}
+  .w.glide.lit{color:rgba(244,247,248,0.72)}
+
+  .sub{margin:28px auto 0;max-width:560px;color:var(--dim);
+    font-size:clamp(15px,1.7vw,18px);line-height:1.55}
+  .sub b{color:var(--text);font-weight:700}
+
+  .cta-row{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .cta{border:0;cursor:pointer;background:var(--turq);color:#04222B;font-family:inherit;
+    font-size:17px;font-weight:800;padding:15px 34px;border-radius:999px;
+    box-shadow:0 10px 30px rgba(76,201,232,0.28);
+    transition:transform .15s ease,box-shadow .2s ease,background .2s ease}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(76,201,232,0.42);background:#63d4ef}
+  .cta:active{transform:translateY(0) scale(.98)}
+  .cta:focus-visible{outline:3px solid var(--turq-soft);outline-offset:3px}
+  .replay{margin-top:2px;background:none;border:0;color:var(--faint);font-family:inherit;
+    font-size:13px;cursor:pointer;letter-spacing:.02em}
+  .replay:hover{color:var(--turq)}
+
+  @media (max-width:560px){.line{font-size:clamp(20px,6.6vw,30px)}.inner{padding:40px 20px}}
+  @media (prefers-reduced-motion:reduce){.w,.stage,.cta{transition:none}}
+</style>
+</head>
+<body>
+<h2 class="sr-only">SayItLikeThat website hero. The sentence "It's not your grammar. It's the melody." starts flat and gray, then the melody switches on: stressed words lift up in turquoise, a glowing line threads through them, and the beat travels word to word.</h2>
+
+<section class="hero" id="hero">
+  <div class="glow"></div>
+  <div class="vignette"></div>
+  <div class="inner">
+    <p class="eyebrow">SayItLikeThat</p>
+    <h1 class="headline">You speak English.<br><span class="dim">People still make you repeat it.</span></h1>
+
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <svg class="msvg" id="msvg" aria-hidden="true">
+          <path id="mpath"/>
+          <circle id="head" r="4"/>
+        </svg>
+        <div class="line is-flat" id="line">
+          <span class="w glide" data-y="12">It's</span>
+          <span class="w punch" data-y="-34">not</span>
+          <span class="w glide" data-y="8">your</span>
+          <span class="w punch big" data-y="-48">grammar.</span>
+          <span class="w glide" data-y="-4">It's</span>
+          <span class="w glide" data-y="14">the</span>
+          <span class="w punch" data-y="-30">melody.<span class="rise">↗</span></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="sub">The words to <b>punch</b>, and the ones to let go — marked right on your own script.</p>
+    <div class="cta-row">
+      <button class="cta" type="button">Start with the free guide</button>
+      <button class="replay" id="replay" type="button">↺ watch it again</button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var hero=document.getElementById('hero'),stage=document.getElementById('stage'),
+      line=document.getElementById('line'),path=document.getElementById('mpath'),
+      head=document.getElementById('head'),replay=document.getElementById('replay');
+  var words=[].slice.call(line.querySelectorAll('.w'));
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timers=[],beatTimer=null,paused=false;
+
+  words.forEach(function(w){w.style.setProperty('--ty',(w.getAttribute('data-y')||0)+'px');});
+
+  function centers(){
+    var sb=stage.getBoundingClientRect();
+    return words.map(function(w){var r=w.getBoundingClientRect();
+      return {x:r.left-sb.left+r.width/2,y:r.top-sb.top+r.height/2};});
+  }
+  function buildPath(p){
+    if(p.length<2)return '';var d='M '+p[0].x.toFixed(1)+' '+p[0].y.toFixed(1),t=.16;
+    for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;
+      var c1x=b.x+(c.x-a.x)*t,c1y=b.y+(c.y-a.y)*t,c2x=c.x-(e.x-b.x)*t,c2y=c.y-(e.y-b.y)*t;
+      d+=' C '+c1x.toFixed(1)+' '+c1y.toFixed(1)+', '+c2x.toFixed(1)+' '+c2y.toFixed(1)+', '+c.x.toFixed(1)+' '+c.y.toFixed(1);}
+    return d;
+  }
+  function setPath(){path.setAttribute('d',buildPath(centers()));}
+
+  function drawCurve(animate){
+    setPath();var len=path.getTotalLength();
+    if(!animate||reduce){path.style.strokeDasharray='none';path.style.strokeDashoffset=0;head.style.opacity=0;return;}
+    path.style.strokeDasharray=len;path.style.strokeDashoffset=len;path.getBoundingClientRect();
+    var dur=1250,start=null;head.style.opacity=1;
+    function frame(ts){if(!start)start=ts;var p=Math.min((ts-start)/dur,1);
+      var e=1-Math.pow(1-p,3);path.style.strokeDashoffset=len*(1-e);
+      var pt=path.getPointAtLength(len*e);head.setAttribute('cx',pt.x);head.setAttribute('cy',pt.y);
+      if(p<1)requestAnimationFrame(frame);else head.style.opacity=0;}
+    requestAnimationFrame(frame);
+  }
+
+  function beat(){
+    var idx=0;
+    function step(){
+      if(paused)return;
+      words.forEach(function(w){w.classList.remove('lit');});
+      var w=words[idx];w.classList.add('lit');var punch=w.classList.contains('punch');idx++;
+      var dwell=punch?520:300;if(idx>=words.length){idx=0;dwell=1600;}
+      beatTimer=setTimeout(function(){w.classList.remove('lit');step();},dwell);
+    }
+    step();
+  }
+
+  function clearAll(){timers.forEach(clearTimeout);timers=[];clearTimeout(beatTimer);
+    words.forEach(function(w){w.classList.remove('lit','pulse');w.style.transitionDelay='';});}
+
+  function run(){
+    clearAll();paused=false;
+    if(reduce){line.classList.remove('is-flat');setPath();path.style.strokeDasharray='none';head.style.opacity=0;replay.style.display='none';return;}
+    line.classList.add('is-flat');path.style.strokeDasharray='1';path.style.strokeDashoffset='1';head.style.opacity=0;
+    // tune: lift each word from flat into its melody, staggered
+    timers.push(setTimeout(function(){
+      words.forEach(function(w,i){w.style.transitionDelay=(i*58)+'ms';});
+      line.classList.remove('is-flat');
+      words.forEach(function(w,i){if(w.classList.contains('punch')){
+        timers.push(setTimeout(function(){w.classList.add('pulse');
+          timers.push(setTimeout(function(){w.classList.remove('pulse');},600));},650+i*58));}});
+      timers.push(setTimeout(function(){words.forEach(function(w){w.style.transitionDelay='';});},700+words.length*58));
+    },700));
+    // draw the line through them
+    timers.push(setTimeout(function(){drawCurve(true);},700+words.length*58+380));
+    // let the beat travel
+    timers.push(setTimeout(beat,700+words.length*58+380+1450));
+  }
+
+  // hover scrub
+  words.forEach(function(w){
+    w.addEventListener('mouseenter',function(){paused=true;clearTimeout(beatTimer);
+      words.forEach(function(x){x.classList.remove('lit');});w.classList.add('lit');});
+    w.addEventListener('mouseleave',function(){w.classList.remove('lit');
+      clearTimeout(beatTimer);beatTimer=setTimeout(function(){paused=false;beat();},1200);});
+  });
+
+  // parallax
+  if(!reduce){
+    hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();
+      var px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
+      stage.style.transform='rotateY('+(px*9).toFixed(2)+'deg) rotateX('+(-py*6).toFixed(2)+'deg)';});
+    hero.addEventListener('mouseleave',function(){stage.style.transform='rotateY(0) rotateX(0)';});
+  }
+
+  window.addEventListener('resize',function(){setPath();});
+  replay.addEventListener('click',run);
+
+  function boot(){run();}
+  if(document.readyState==='complete')setTimeout(boot,80);
+  else window.addEventListener('load',function(){setTimeout(boot,80);});
+})();
+</script>
+</body>
+</html>
