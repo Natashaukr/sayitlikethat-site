@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayItLikeThat — Speak with the American melody</title>
+<style>
+  :root{
+    --ink:#0C1011; --raised:#131819; --line:#1D2A2E;
+    --turq:#4CC9E8; --turq-soft:#A9E4F6;
+    --text:#F4F7F8; --dim:rgba(244,247,248,0.62); --faint:rgba(244,247,248,0.40);
+    --maxw:1000px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  a{color:var(--turq);text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{color:var(--turq);font-size:12.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin:0 0 14px}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(12,16,17,0.72);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{font-weight:800;font-size:18px;letter-spacing:-.01em;color:var(--text)}
+  .brand b{color:var(--turq)}
+  .navlinks{display:flex;align-items:center;gap:26px}
+  .navlinks a{color:var(--dim);font-size:14.5px;font-weight:600}
+  .navlinks a:hover{color:var(--text)}
+  .pill{background:var(--turq);color:#04222B;padding:9px 18px;border-radius:999px;font-weight:800;font-size:14px}
+  .pill:hover{background:#63d4ef}
+  @media(max-width:680px){.navlinks a.hideable{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:88vh;min-height:88dvh;display:flex;align-items:center;
+    justify-content:center;overflow:hidden;isolation:isolate;text-align:center}
+  .glow{position:absolute;inset:-20%;z-index:0;pointer-events:none;filter:blur(8px);
+    background:radial-gradient(36% 40% at 80% 4%,rgba(76,201,232,0.20),transparent 60%),
+      radial-gradient(30% 36% at 8% 100%,rgba(76,201,232,0.08),transparent 55%)}
+  .vig{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(66% 66% at 50% 40%,transparent 46%,rgba(0,0,0,0.42) 100%)}
+  .hero .wrap{position:relative;z-index:2;padding-top:40px;padding-bottom:40px}
+  h1{margin:0;font-size:clamp(30px,5vw,56px);font-weight:800;line-height:1.04;letter-spacing:-.022em;text-wrap:balance}
+  h1 .dim{color:rgba(244,247,248,0.5);font-weight:700}
+  .hero .sub{margin:26px auto 0;max-width:560px;color:var(--dim);font-size:clamp(15px,1.7vw,18px)}
+  .hero .sub b{color:var(--text);font-weight:700}
+  .cta-row{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .cta{border:0;cursor:pointer;background:var(--turq);color:#04222B;font-family:inherit;font-size:17px;
+    font-weight:800;padding:15px 34px;border-radius:999px;box-shadow:0 10px 30px rgba(76,201,232,0.28);
+    transition:transform .15s,box-shadow .2s,background .2s;display:inline-block}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(76,201,232,0.42);background:#63d4ef}
+  .cta:active{transform:translateY(0) scale(.98)}
+  .cta:focus-visible{outline:3px solid var(--turq-soft);outline-offset:3px}
+  .replay{background:none;border:0;color:var(--faint);font-family:inherit;font-size:13px;cursor:pointer}
+  .replay:hover{color:var(--turq)}
+
+  /* ---------- melody motif (reusable) ---------- */
+  .melody{position:relative}
+  .mstage{position:relative;padding:64px 0 56px}
+  .mline{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1}
+  .melody path{fill:none;stroke:var(--turq);stroke-width:2.4;stroke-linecap:round;
+    filter:drop-shadow(0 0 9px rgba(76,201,232,0.55));opacity:.9}
+  .melody .head{fill:var(--turq-soft);filter:drop-shadow(0 0 12px rgba(76,201,232,0.95));opacity:0}
+  .line{position:relative;z-index:2;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;
+    gap:clamp(6px,1.1vw,14px);font-size:clamp(24px,4vw,46px)}
+  .w{display:inline-block;white-space:nowrap;transform:translateY(var(--ty,0));
+    transition:transform .55s cubic-bezier(.22,.9,.24,1),color .55s,font-size .55s,text-shadow .4s}
+  .glide{color:rgba(244,247,248,0.34);font-weight:500;font-size:.60em}
+  .punch{color:var(--turq);font-weight:800}
+  .punch.big{font-size:1.05em}
+  .rise{font-size:.4em;color:var(--turq);font-weight:700;position:relative;top:-.75em;left:.05em;opacity:.85}
+  .line.is-flat .w{transform:translateY(0)!important;color:rgba(244,247,248,0.26)!important;
+    font-weight:500!important;font-size:.64em!important;text-shadow:none!important}
+  @keyframes punchPulse{0%{text-shadow:0 0 0 rgba(76,201,232,0)}40%{text-shadow:0 0 26px rgba(76,201,232,0.9)}100%{text-shadow:0 0 13px rgba(76,201,232,0.32)}}
+  .w.pulse{animation:punchPulse .6s ease}
+  .w.lit{filter:brightness(1.22)}.w.punch.lit{text-shadow:0 0 24px rgba(76,201,232,0.9)}.w.glide.lit{color:rgba(244,247,248,0.72)}
+
+  /* ---------- sections ---------- */
+  section.band{padding:96px 0;border-top:1px solid var(--line)}
+  .band h2{font-size:clamp(24px,3.4vw,38px);font-weight:800;letter-spacing:-.02em;margin:0 0 16px;line-height:1.12;text-wrap:balance}
+  .band p.lead{color:var(--dim);font-size:clamp(16px,1.9vw,19px);max-width:620px;margin:0}
+  .center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
+
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:44px}
+  @media(max-width:680px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--raised);border:1px solid var(--line);border-radius:16px;padding:26px 24px}
+  .step .n{color:var(--turq);font-weight:800;font-size:14px;letter-spacing:.04em}
+  .step h3{margin:10px 0 8px;font-size:19px;font-weight:800}
+  .step p{margin:0;color:var(--dim);font-size:15.5px}
+
+  .price{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:44px}
+  @media(max-width:680px){.price{grid-template-columns:1fr}}
+  .card{background:var(--raised);border:1px solid var(--line);border-radius:18px;padding:30px 28px}
+  .card.hi{border-color:rgba(76,201,232,0.45);box-shadow:0 0 0 1px rgba(76,201,232,0.15),0 20px 50px rgba(0,0,0,0.35)}
+  .card .tag{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .card.hi .tag{color:var(--turq)}
+  .card .big{font-size:30px;font-weight:800;margin:8px 0 2px}
+  .card .note{color:var(--dim);font-size:14.5px;margin:0 0 16px}
+  .card ul{list-style:none;padding:0;margin:0 0 20px}
+  .card li{color:var(--dim);font-size:15px;padding:7px 0 7px 26px;position:relative}
+  .card li::before{content:"";position:absolute;left:0;top:13px;width:12px;height:8px;
+    border-left:2px solid var(--turq);border-bottom:2px solid var(--turq);transform:rotate(-45deg)}
+
+  .final{position:relative;overflow:hidden;text-align:center;padding:110px 0}
+  .final .glow2{position:absolute;inset:-30%;z-index:0;pointer-events:none;filter:blur(10px);
+    background:radial-gradient(40% 50% at 50% 0%,rgba(76,201,232,0.18),transparent 60%)}
+  .final .wrap{position:relative;z-index:2}
+
+  footer{border-top:1px solid var(--line);padding:44px 0;color:var(--faint)}
+  footer .row{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+  footer .brand{font-size:16px}
+  footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
+  footer .flinks a{color:var(--dim);font-size:14px}
+  footer .flinks a:hover{color:var(--turq)}
+  footer .legal{margin-top:20px;font-size:13px;color:var(--faint);line-height:1.7}
+
+  /* reveal motion */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.w,.cta{transition:none}}
+</style>
+</head>
+<body>
+<h2 class="sr-only">SayItLikeThat teaches the melody of American English — which words to punch and which to glide — on your own script, so your accent sounds warm instead of foreign.</h2>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">SayIt<b>Like</b>That</a>
+    <div class="navlinks">
+      <a class="hideable" href="#how">How it works</a>
+      <a class="hideable" href="#melody">The melody</a>
+      <a class="hideable" href="#pricing">Pricing</a>
+      <a class="pill" href="#free">Free guide</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="glow"></div><div class="vig"></div>
+  <div class="wrap">
+    <p class="eyebrow">SayItLikeThat</p>
+    <h1>You speak English.<br><span class="dim">People still make you repeat it.</span></h1>
+    <div class="melody" style="margin:26px 0 6px">
+      <div class="mstage">
+        <svg class="mline" aria-hidden="true"><path/><circle class="head" r="4"/></svg>
+        <div class="line is-flat" data-hero>
+          <span class="w glide" data-y="12">It's</span>
+          <span class="w punch" data-y="-34">not</span>
+          <span class="w glide" data-y="8">your</span>
+          <span class="w punch big" data-y="-48">grammar.</span>
+          <span class="w glide" data-y="-4">It's</span>
+          <span class="w glide" data-y="14">the</span>
+          <span class="w punch" data-y="-30">melody.<span class="rise">↗</span></span>
+        </div>
+      </div>
+    </div>
+    <p class="sub">The words to <b>punch</b>, and the ones to let go — marked right on your own script.</p>
+    <div class="cta-row">
+      <a class="cta" href="#free">Start with the free guide</a>
+      <button class="replay" id="replay" type="button">↺ watch it again</button>
+    </div>
+  </div>
+</header>
+
+<!-- FEELING -->
+<section class="band" id="feeling">
+  <div class="wrap reveal">
+    <p class="eyebrow">Sound familiar?</p>
+    <h2>You say it right. They still say "sorry, what?"</h2>
+    <p class="lead">You've rehearsed the sentence ten times. You know every word. And the second it leaves your mouth, their face does that little confused thing — and you shrink a bit. It isn't your vocabulary. It isn't your grammar. It's the rhythm nobody ever taught you.</p>
+  </div>
+</section>
+
+<!-- THE MELODY -->
+<section class="band center" id="melody">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">The fix</p>
+      <h2>Every English sentence has a beat.</h2>
+      <p class="lead">Some words get hit hard. The small ones nearly vanish. Your voice climbs, then drops. Native ears don't judge your accent — they feel whether you caught the beat. Catch it, and your same voice sounds warm and sure.</p>
+    </div>
+    <div class="melody reveal" style="margin-top:30px" data-scroll>
+      <div class="mstage">
+        <svg class="mline" aria-hidden="true"><path/><circle class="head" r="4"/></svg>
+        <div class="line is-flat">
+          <span class="w glide" data-y="12">I</span>
+          <span class="w punch big" data-y="-40">really</span>
+          <span class="w punch" data-y="-30">think</span>
+          <span class="w glide" data-y="10">we</span>
+          <span class="w glide" data-y="0">should</span>
+          <span class="w punch" data-y="-36">talk.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">How it works</p><h2>Four steps. English in, confidence out.</h2></div>
+    <div class="steps">
+      <div class="step reveal" style="--d:0ms"><div class="n">01</div><h3>Paste your English</h3><p>A speech, an interview answer, a script for a video. English only — and clumsy is completely fine.</p></div>
+      <div class="step reveal" style="--d:80ms"><div class="n">02</div><h3>See the melody</h3><p>The app marks which words to punch and which to glide. Automatically, the moment you paste.</p></div>
+      <div class="step reveal" style="--d:160ms"><div class="n">03</div><h3>Read it out loud</h3><p>A hands-free teleprompter carries you through. Listen back to yourself once — then it's gone for good.</p></div>
+      <div class="step reveal" style="--d:240ms"><div class="n">04</div><h3>Record yourself</h3><p>Your words sit right by the lens, so you look people in the eye. Style it with captions, post it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="band center" id="pricing">
+  <div class="wrap">
+    <div class="reveal"><p class="eyebrow">What it costs</p><h2>Free to start. Honest from there.</h2></div>
+    <div class="price">
+      <div class="card reveal" style="text-align:left"><div class="tag">Free forever</div>
+        <div class="big">$0</div><p class="note">No account. No card. Nothing leaves your phone.</p>
+        <ul><li>Two of your own scripts</li><li>All the practice packs</li><li>The melody teleprompter</li><li>Listen back to yourself</li></ul>
+      </div>
+      <div class="card hi reveal" style="text-align:left;--d:100ms"><div class="tag">Premium</div>
+        <div class="big">$4.99<span style="font-size:16px;font-weight:600;color:var(--dim)">/mo</span></div>
+        <p class="note">7-day free trial. Or pay once — $44.99 — and own it for good.</p>
+        <ul><li>Unlimited scripts</li><li>Record video with captions</li><li>Seven caption looks, filters, effects</li><li>Every ratio: Reels, TikTok, YouTube</li></ul>
+      </div>
+    </div>
+    <p class="lead center" style="margin-top:22px;font-size:14.5px;color:var(--faint)">Cancel anytime in your iPhone settings. Everything you make stays yours.</p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="free">
+  <div class="glow2"></div>
+  <div class="wrap reveal">
+    <p class="eyebrow">Start where it's easiest</p>
+    <h2 style="font-size:clamp(26px,3.8vw,42px);font-weight:800;letter-spacing:-.02em;margin:0 0 14px">Grab the free guide.</h2>
+    <p class="lead center" style="margin:0 auto 26px">The fastest wins for sounding American — no app required. Then, when you're ready, read your own words with the melody.</p>
+    <a class="cta" href="checklist.html">Get the free guide</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <div class="brand"><span style="font-weight:800">SayIt<b style="color:var(--turq)">Like</b>That</span> · <span style="color:var(--dim)">Speak with the American melody</span></div>
+      <div class="flinks">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+        <a href="blog/index.html">Blog</a>
+        <a href="checklist.html">Free guide</a>
+      </div>
+    </div>
+    <p class="legal">© 2026 Natasha Lucas. All rights reserved. SayItLikeThat™ and the melody mark are brand assets of Natasha Lucas.<br>Made for iPhone. Your English practice stays English — nothing is translated, nothing is stored, nothing leaves your device.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function centers(stage,words){var sb=stage.getBoundingClientRect();
+    return words.map(function(w){var r=w.getBoundingClientRect();
+      return {x:r.left-sb.left+r.width/2,y:r.top-sb.top+r.height/2};});}
+  function buildPath(p){if(p.length<2)return '';var d='M '+p[0].x.toFixed(1)+' '+p[0].y.toFixed(1),t=.16;
+    for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;
+      d+=' C '+(b.x+(c.x-a.x)*t).toFixed(1)+' '+(b.y+(c.y-a.y)*t).toFixed(1)+', '+
+        (c.x-(e.x-b.x)*t).toFixed(1)+' '+(c.y-(e.y-b.y)*t).toFixed(1)+', '+c.x.toFixed(1)+' '+c.y.toFixed(1);}
+    return d;}
+
+  function melodyParts(mel){return{stage:mel.querySelector('.mstage'),svg:mel.querySelector('.mline'),
+    path:mel.querySelector('path'),head:mel.querySelector('.head'),line:mel.querySelector('.line'),
+    words:[].slice.call(mel.querySelectorAll('.w'))};}
+
+  function setTy(p){p.words.forEach(function(w){w.style.setProperty('--ty',(w.getAttribute('data-y')||0)+'px');});}
+
+  function draw(p,animate){
+    p.path.setAttribute('d',buildPath(centers(p.stage,p.words)));
+    var len=p.path.getTotalLength();
+    if(!animate||reduce){p.path.style.strokeDasharray='none';p.path.style.strokeDashoffset=0;if(p.head)p.head.style.opacity=0;return;}
+    p.path.style.strokeDasharray=len;p.path.style.strokeDashoffset=len;p.path.getBoundingClientRect();
+    var dur=1200,start=null;if(p.head)p.head.style.opacity=1;
+    function fr(ts){if(!start)start=ts;var q=Math.min((ts-start)/dur,1),e=1-Math.pow(1-q,3);
+      p.path.style.strokeDashoffset=len*(1-e);
+      if(p.head){var pt=p.path.getPointAtLength(len*e);p.head.setAttribute('cx',pt.x);p.head.setAttribute('cy',pt.y);}
+      if(q<1)requestAnimationFrame(fr);else if(p.head)p.head.style.opacity=0;}
+    requestAnimationFrame(fr);
+  }
+
+  function lift(p,pulse){
+    p.words.forEach(function(w,i){w.style.transitionDelay=(i*56)+'ms';});
+    p.line.classList.remove('is-flat');
+    if(pulse){p.words.forEach(function(w,i){if(w.classList.contains('punch')){
+      setTimeout(function(){w.classList.add('pulse');setTimeout(function(){w.classList.remove('pulse');},600);},640+i*56);}});}
+    setTimeout(function(){p.words.forEach(function(w){w.style.transitionDelay='';});},700+p.words.length*56);
+  }
+
+  // HERO
+  var heroMel=document.querySelector('.hero .melody');
+  if(heroMel){
+    var hp=melodyParts(heroMel);setTy(hp);
+    var replay=document.getElementById('replay'),beatTimer=null,paused=false,tos=[];
+    function clearAll(){tos.forEach(clearTimeout);tos=[];clearTimeout(beatTimer);
+      hp.words.forEach(function(w){w.classList.remove('lit','pulse');w.style.transitionDelay='';});}
+    function beat(){var i=0;(function step(){if(paused)return;hp.words.forEach(function(w){w.classList.remove('lit');});
+      var w=hp.words[i];w.classList.add('lit');var pu=w.classList.contains('punch');i++;var d=pu?520:300;
+      if(i>=hp.words.length){i=0;d=1600;}beatTimer=setTimeout(function(){w.classList.remove('lit');step();},d);})();}
+    function runHero(){clearAll();paused=false;
+      if(reduce){hp.line.classList.remove('is-flat');draw(hp,false);replay.style.display='none';return;}
+      hp.line.classList.add('is-flat');hp.path.style.strokeDasharray='1';hp.path.style.strokeDashoffset='1';hp.head.style.opacity=0;
+      tos.push(setTimeout(function(){lift(hp,true);},700));
+      tos.push(setTimeout(function(){draw(hp,true);},700+hp.words.length*56+360));
+      tos.push(setTimeout(beat,700+hp.words.length*56+360+1350));}
+    hp.words.forEach(function(w){
+      w.addEventListener('mouseenter',function(){paused=true;clearTimeout(beatTimer);
+        hp.words.forEach(function(x){x.classList.remove('lit');});w.classList.add('lit');});
+      w.addEventListener('mouseleave',function(){w.classList.remove('lit');clearTimeout(beatTimer);
+        beatTimer=setTimeout(function(){paused=false;beat();},1200);});});
+    if(!reduce){var hero=document.querySelector('.hero');
+      hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();
+        hp.stage.style.transform='rotateY('+(((e.clientX-r.left)/r.width-.5)*8).toFixed(2)+'deg) rotateX('+((-((e.clientY-r.top)/r.height-.5))*5).toFixed(2)+'deg)';});
+      hero.addEventListener('mouseleave',function(){hp.stage.style.transform='';});
+      hp.stage.style.transformStyle='preserve-3d';hp.stage.parentElement.style.perspective='1100px';}
+    replay.addEventListener('click',runHero);
+    window.addEventListener('resize',function(){draw(hp,false);});
+    window.addEventListener('load',function(){setTimeout(runHero,80);});
+  }
+
+  // reveals + section melody
+  var revs=[].slice.call(document.querySelectorAll('.reveal'));
+  var sectionMels=[].slice.call(document.querySelectorAll('.melody[data-scroll]')).map(function(m){var p=melodyParts(m);setTy(p);return p;});
+  if(reduce){revs.forEach(function(r){r.classList.add('in');});sectionMels.forEach(function(p){p.line.classList.remove('is-flat');draw(p,false);});}
+  else if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting){en.target.classList.add('in');
+        var mel=en.target.querySelector?en.target.querySelector('.melody[data-scroll]'):null;
+        var found=sectionMels.filter(function(p){return p.line.closest('.reveal')===en.target;})[0];
+        if(found&&!found._done){found._done=true;setTimeout(function(){lift(found,true);draw(found,true);},180);}
+        io.unobserve(en.target);}});},{threshold:0.25});
+    revs.forEach(function(r){io.observe(r);});
+  } else {revs.forEach(function(r){r.classList.add('in');});sectionMels.forEach(function(p){p.line.classList.remove('is-flat');draw(p,false);});}
+})();
+</script>
+</body>
+</html>
