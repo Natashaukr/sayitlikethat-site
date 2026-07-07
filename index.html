@@ -91,6 +91,13 @@
   @keyframes punchPulse{0%{text-shadow:0 0 0 rgba(76,201,232,0)}40%{text-shadow:0 0 26px rgba(76,201,232,0.9)}100%{text-shadow:0 0 13px rgba(76,201,232,0.32)}}
   .w.pulse{animation:punchPulse .6s ease}
   .w.lit{filter:brightness(1.22)}.w.punch.lit{text-shadow:0 0 24px rgba(76,201,232,0.9)}.w.glide.lit{color:rgba(244,247,248,0.72)}
+  /* respect to the flag — click sends a turquoise ripple and a gust through the words */
+  .hero .ripple{position:absolute;z-index:1;border-radius:50%;pointer-events:none;
+    border:1.5px solid rgba(76,201,232,0.45);transform:translate(-50%,-50%) scale(0);
+    animation:rip 1.15s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rip{0%{transform:translate(-50%,-50%) scale(0);opacity:.7}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+  @keyframes gustBob{0%{transform:translateY(var(--ty,0))}42%{transform:translateY(calc(var(--ty,0px) - 15px))}100%{transform:translateY(var(--ty,0))}}
+  .w.gust{animation:gustBob .6s cubic-bezier(.3,.8,.3,1)}
 
   /* ---------- sections ---------- */
   section.band{padding:96px 0;border-top:1px solid var(--line)}
@@ -354,7 +361,18 @@
       hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();
         hp.stage.style.transform='rotateY('+(((e.clientX-r.left)/r.width-.5)*8).toFixed(2)+'deg) rotateX('+((-((e.clientY-r.top)/r.height-.5))*5).toFixed(2)+'deg)';});
       hero.addEventListener('mouseleave',function(){hp.stage.style.transform='';});
-      hp.stage.style.transformStyle='preserve-3d';hp.stage.parentElement.style.perspective='1100px';}
+      hp.stage.style.transformStyle='preserve-3d';hp.stage.parentElement.style.perspective='1100px';
+      // click anywhere on the hero → a turquoise ripple + a gust of wind through the words
+      hero.addEventListener('pointerdown',function(e){
+        if(e.target.closest('a')||e.target.closest('button'))return;
+        var r=hero.getBoundingClientRect(),size=Math.max(r.width,r.height)*0.9;
+        var rp=document.createElement('div');rp.className='ripple';
+        rp.style.width=rp.style.height=size+'px';
+        rp.style.left=(e.clientX-r.left)+'px';rp.style.top=(e.clientY-r.top)+'px';
+        hero.appendChild(rp);setTimeout(function(){rp.remove();},1150);
+        hp.words.forEach(function(w,i){setTimeout(function(){w.classList.add('gust');
+          setTimeout(function(){w.classList.remove('gust');},600);},i*45);});
+      });}
     replay.addEventListener('click',runHero);
     window.addEventListener('resize',function(){draw(hp,false);});
     window.addEventListener('load',function(){setTimeout(runHero,80);});
