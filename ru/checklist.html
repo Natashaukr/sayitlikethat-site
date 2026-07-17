@@ -95,14 +95,9 @@
          5. Delete the small "opens your email app" note below
             the button.
        ============================================================ -->
-  <form class="email-form"
-        action="mailto:sayitlikethat.app@gmail.com?subject=Checklist%20please"
-        method="post" enctype="text/plain">
-    <label for="email">Ваш адрес электронной почты</label>
-    <input type="email" id="email" name="email" placeholder="vy@example.com" required>
-    <button class="btn" type="submit">Пришлите мне чек-лист для печати</button>
-    <span class="btn-note">Сейчас эта кнопка открывает вашу почтовую программу с уже заполненным письмом к нам — просто нажмите «отправить», и мы ответим письмом с PDF.</span>
-  </form>
+  <div class="email-form">
+    <a class="btn" href="../assets/sayitlikethat-checklist.pdf" download target="_blank" rel="noopener">Пришлите мне чек-лист для печати</a>
+  </div>
 
   <div class="cta-box">
     <h2>Чек-лист — это ритуал. SayItLikeThat — инструмент.</h2>
